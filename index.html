@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asteroids Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        
+        #game-container {
+            border: 2px solid #333;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container"></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/pixi.js@7.x/dist/pixi.min.js"></script>
+    <script>
+        // Game configuration
+        const GAME_WIDTH = 800;
+        const GAME_HEIGHT = 600;
+        const TARGET_FPS = 60;
+        const FRAME_DURATION = 1000 / TARGET_FPS;
+        
+        // Create PixiJS application
+        const app = new PIXI.Application({
+            width: GAME_WIDTH,
+            height: GAME_HEIGHT,
+            backgroundColor: 0x000000,
+            antialias: true,
+            resolution: window.devicePixelRatio || 1,
+            autoDensity: true
+        });
+        
+        // Add canvas to the container
+        document.getElementById('game-container').appendChild(app.view);
+        
+        // Game state
+        const gameState = {
+            lastFrameTime: 0,
+            deltaTime: 0,
+            fps: 0,
+            frameCount: 0,
+            fpsUpdateTime: 0
+        };
+        
+        // FPS counter text
+        const fpsText = new PIXI.Text('FPS: 0', {
+            fontFamily: 'Arial',
+            fontSize: 16,
+            fill: 0xffffff,
+            align: 'left'
+        });
+        fpsText.x = 10;
+        fpsText.y = 10;
+        app.stage.addChild(fpsText);
+        
+        // Main game update function
+        function update(deltaTime) {
+            // Update game logic here
+            // This will be expanded in future issues
+        }
+        
+        // Main game draw function
+        function draw() {
+            // Drawing is handled automatically by PixiJS
+            // Additional draw calls can be added here if needed
+        }
+        
+        // Game loop with 60 FPS timing control
+        function gameLoop(currentTime) {
+            // Calculate delta time
+            if (gameState.lastFrameTime === 0) {
+                gameState.lastFrameTime = currentTime;
+            }
+            
+            gameState.deltaTime = currentTime - gameState.lastFrameTime;
+            
+            // Only update if enough time has passed for target FPS
+            if (gameState.deltaTime >= FRAME_DURATION) {
+                // Update FPS counter
+                gameState.frameCount++;
+                if (currentTime - gameState.fpsUpdateTime >= 1000) {
+                    gameState.fps = gameState.frameCount;
+                    gameState.frameCount = 0;
+                    gameState.fpsUpdateTime = currentTime;
+                    fpsText.text = `FPS: ${gameState.fps}`;
+                }
+                
+                // Update game logic
+                update(gameState.deltaTime);
+                
+                // Draw is handled automatically by PixiJS renderer
+                draw();
+                
+                gameState.lastFrameTime = currentTime - (gameState.deltaTime % FRAME_DURATION);
+            }
+            
+            // Continue the loop
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // Start the game loop
+        requestAnimationFrame(gameLoop);
+        
+        // Log initialization
+        console.log('Asteroids game initialized');
+        console.log(`Canvas size: ${GAME_WIDTH}x${GAME_HEIGHT}`);
+        console.log(`Target FPS: ${TARGET_FPS}`);
+    </script>
+</body>
+</html>
